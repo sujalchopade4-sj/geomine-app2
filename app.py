@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Custom CSS for a professional hackathon-ready UI
+# Custom CSS for a professional UI
 st.markdown(
     """
     <style>
@@ -122,11 +122,6 @@ page = st.sidebar.radio(
         "Ask Your Data",
         "Review & Audit Trail",
     ],
-)
-
-st.sidebar.markdown("---")
-st.sidebar.info(
-    "💡 **Hackathon Mode Active**\nLocal-first transparent validation engine"
 )
 
 # -----------------------------------------------------------------
@@ -290,7 +285,6 @@ elif page == "Ask Your Data":
   if query:
     df = get_df()
     if not df.empty:
-      # Filter rows where any column contains the query string
       mask = (
           df.astype(str)
           .apply(lambda col: col.str.contains(query, case=False, na=False))
@@ -323,7 +317,6 @@ elif page == "Review & Audit Trail":
   if not df.empty:
     for idx, row in df.iterrows():
       rid = row.get("record_id", f"Row {idx+1}")
-      # Check for missing values
       for col, val in row.items():
         if pd.isna(val) or str(val).strip() == "":
           flags.append({
@@ -334,7 +327,6 @@ elif page == "Review & Audit Trail":
                   f"Verify field sheet entry for column {col}."
               ),
           })
-      # Check notes for keywords
       notes = str(row.get("notes", ""))
       if any(
           kw in notes.lower()
